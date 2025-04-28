@@ -1,4 +1,4 @@
-# Basic Auth Template
+# JWT Auth Template
 
 This is a basic authentication template built with the following technologies:
 
