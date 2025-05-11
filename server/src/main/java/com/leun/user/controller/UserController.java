@@ -66,17 +66,18 @@ public class UserController {
     }
 
     @PostMapping("/user/profile/image")
-    public void updateUserProfileImage(
+    public ResponseEntity<UserProfileDto.Response> updateUserProfileImage(
         @AuthenticationPrincipal UserDetails userDetails,
-        @ModelAttribute UserProfileDto.Request.Image userProfileDto) {
+        @ModelAttribute UserProfileDto.Request.Image userProfileDto) throws Exception {
 
         // DTO 내부의 MultipartFile 필드를 통해 파일에 접근
         MultipartFile imageFile = userProfileDto.getImage();
         System.out.println("받은 파일 이름: " + imageFile.getOriginalFilename());
         System.out.println("받은 파일 크기: " + imageFile.getSize() + " bytes");
 
-        // S3 업로드 로직을 구현
+        UserProfileDto.Response response = userService.updateUserProfileImage(userDetails.getUsername());
 
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/user/setting/language")
