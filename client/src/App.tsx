@@ -1,35 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Box from "@mui/material/Box";
+import CssBaseline from '@mui/material/CssBaseline';
+
+import SignIn from "pages/SignIn";
+import SignUp from "pages/SignUp";
+import { AuthProvider } from "components/auth/AuthContext";
+import { setupInterceptors } from "apis/setupInterceptors";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import AuthenticatedRoute from "components/auth/AuthenticatedRoute";
+import Settings from "pages/Settings";
+import Home from "pages/Home";
+import Profile from "pages/Profile";
+import NaverCallback from "pages/NaverCallback"; 
+
+
+setupInterceptors();
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    return (
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+            <AuthProvider>
+                <Router>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            minHeight: '100vh',
+                            overflowX: 'hidden'
+                        }}
+                    >
+                        <CssBaseline />
+                        <Box component="main" sx={{ flexGrow: 1 }}>
+                            <Routes>
+                                <Route path="/" element={<Home />} />
+                                
+                                <Route
+                                    path="/settings"
+                                    element={<AuthenticatedRoute><Settings /></AuthenticatedRoute>}
+                                />
+                                <Route
+                                    path="/profile"
+                                    element={<AuthenticatedRoute><Profile /></AuthenticatedRoute>}
+                                />
+                                <Route path="/signin" element={<SignIn />} />
+                                <Route path="/signup" element={<SignUp />} />
+                                <Route path="/naver-callback" element={<NaverCallback />} />
+                                
+                                <Route path='*' element={<Home />} />
+                            </Routes>
+                        </Box>
+                    </Box>
+                </Router>
+            </AuthProvider>
+        </GoogleOAuthProvider>
+    );
 }
 
-export default App
+export default App;
