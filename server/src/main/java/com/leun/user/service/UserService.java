@@ -2,6 +2,7 @@ package com.leun.user.service;
 
 import com.leun.user.dto.UserDto;
 import com.leun.user.dto.UserProfileDto;
+import com.leun.user.dto.UserProfileDto.Response;
 import com.leun.user.dto.UserSettingDto;
 import com.leun.user.entity.User;
 import com.leun.user.entity.User.ProviderType;
@@ -86,6 +87,16 @@ public class UserService {
         userProfileRepository.updateUserName(email, name);
 
         return userProfileRepository.findUserProfileByEmail(email);
+    }
+
+    @Transactional
+    public UserProfileDto.Response updateUserProfileImage(String email) throws Exception {;
+
+        Response response = userProfileRepository.findUserProfileByEmail(email);
+
+        response.setEmail(email);
+
+        return response;
     }
 
     @Transactional
