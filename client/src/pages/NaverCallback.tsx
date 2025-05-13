@@ -43,7 +43,7 @@ function NaverCallback() {
 
         // 유효성 검증 통과 시 서버에 인증 코드 전달
         const processLogin = async () => {
-            const success = await loginWithNaver(authCode, receivedState); // AuthContext 함수 호출
+            const success = await loginWithNaver(authCode); // AuthContext 함수 호출
 
             if (success) {
                 // 로그인 성공 처리 (예: 프로필 페이지로 이동)

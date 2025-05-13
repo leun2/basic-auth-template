@@ -19,7 +19,7 @@ interface AuthContextType {
     authState: AuthState;
     login: (email: string, password: string) => Promise<boolean>;
     loginWithGoogle: (authCode: string) => Promise<boolean>;
-    loginWithNaver: (authCode: string, state: string) => Promise<boolean>;
+    loginWithNaver: (authCode: string) => Promise<boolean>;
     logout: () => void;
 }
 
@@ -168,12 +168,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
     };
 
-    async function loginWithNaver(authCode: string, state: string): Promise<boolean> {
+    async function loginWithNaver(authCode: string): Promise<boolean> {
         try {
             console.log('🔑 Naver Auth Code to send to backend:', authCode);
-            console.log('🔑 Naver State to send to backend:', state);
 
-            const response = await signInWithNaver(authCode, state); // signInWithNaver 함수 호출
+            const response = await signInWithNaver(authCode); // signInWithNaver 함수 호출
 
             if (response?.status === 200) { // response가 undefined가 아니고 status가 200인지 확인
                  console.log('Backend Naver login successful:', response.data);

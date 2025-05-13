@@ -35,10 +35,10 @@ export const signInWithGoogle = (authCode: string) =>
     apiClient.post('/v1/auth/google/login', { 
         code: authCode });
 
-export const signInWithNaver = async (authCode: string, state: string): Promise<SignInResponse | undefined> => {
-    console.log('Calling server Naver login with code:', authCode, 'and state:', state);
+export const signInWithNaver = async (authCode: string): Promise<SignInResponse | undefined> => {
+    console.log('Calling server Naver login with code:', authCode);
     try {
-        const response = await apiClient.post<SignInResponseData>('/v1/auth/naver/login', { code: authCode, state: state });
+        const response = await apiClient.post<SignInResponseData>('/v1/auth/naver/login', { code: authCode });
         // status 필드를 직접 포함하지 않는 경우 axios 응답 객체 사용
         return { status: response.status, data: response.data };
     } catch (error: any) {
