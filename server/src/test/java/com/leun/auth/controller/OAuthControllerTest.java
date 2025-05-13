@@ -68,7 +68,7 @@ public class OAuthControllerTest {
 
     @Test
     @DisplayName("POST /v1/auth/naver/login - 로그인 성공 시 200 OK 및 토큰 반환")
-    void naverLogin_Success() throws Exception {
+    void naverLogin_Success_WithValidCode() throws Exception {
         // Given
         OAuthDto.NaverRequest request = new OAuthDto.NaverRequest("valid_naver_auth_code");
         AuthDto.Response mockResponse = new AuthDto.Response("naver user", "/naver-image.jpg", "mock_naver_jwt_token");
@@ -89,7 +89,7 @@ public class OAuthControllerTest {
 
     @Test
     @DisplayName("POST /v1/auth/google/login - 요청 본문 유효성 검증 실패 (예: 필드 누락 또는 형식 오류)")
-    void googleLogin_Failure_InvalidRequestBody() throws Exception {
+    void googleLogin_Failure_WithInvalidCode() throws Exception {
         // Given
         OAuthDto.GoogleRequest invalidRequest = new GoogleRequest(null);
 
@@ -102,7 +102,7 @@ public class OAuthControllerTest {
 
     @Test
     @DisplayName("POST /v1/auth/naver/login - 요청 본문 유효성 검증 실패 (예: 필드 누락 또는 형식 오류)")
-    void naverLogin_Failure_InvalidRequestBody() throws Exception {
+    void naverLogin_Failure_WithInvalidCode() throws Exception {
         // Given
         OAuthDto.NaverRequest invalidRequest = new NaverRequest(null);
 
