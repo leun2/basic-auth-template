@@ -135,7 +135,7 @@ public class ApplicationIntegrationTest {
         // SpyBean (oAuthService) 스텁 시 doReturn().when() 구문을 사용하는 것이 권장
         doReturn(mockAuthResponse)
             .when(oAuthService)
-            .naverLoginWithAuthCode(anyString());
+            .googleLoginWithAuthCode(anyString());
 
         // When & Then
         mockMvc.perform(post("/v1/auth/google/login")
