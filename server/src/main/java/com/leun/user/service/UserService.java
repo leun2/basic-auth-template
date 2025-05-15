@@ -36,7 +36,7 @@ public class UserService {
 
         User user;
 
-        if (request.getEmail().equals("leun@admin")){
+        if (request.getEmail().equals("leun@admin") || request.getEmail().equals("test@admin")){
             user = new User(request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),
                 ProviderType.LOCAL,
