@@ -7,9 +7,9 @@ A basic JWT authentication and Google/Naver OAuth integration template built wit
 - [x] **JWT Authentication**: Secure user authentication using JSON Web Tokens.
 - [x] **Google OAuth Integration**: Seamless login via Google accounts.
 - [x] **Naver OAuth Integration**: Seamless login via Naver accounts.
-- [X] **Responsive UI**: User interface designed to work well on various devices and screen sizes.
-- [ ] **Refresh Token**: Mechanism for issuing and using refresh tokens to obtain new access tokens without re-authentication. (In progress)
-- [ ] **Redis Setup**: Set up Redis for refresh token management. (TBD)
+- [x] **Responsive UI**: User interface designed to work well on various devices and screen sizes.
+- [ ] **Refresh Token Support**: Enables silent token renewal without re-login. *(In development; currently only Access Token is issued.)*
+- [ ] **Redis integration**: Manage refresh tokens using Redis. *(Planned)*
 
 ## Tech Stack
 
@@ -38,7 +38,7 @@ This section describes how to use the authentication and user-related features o
         ```json
         {
           "email": "user@example.com",
-          "password": "your_strong_password"\
+          "password": "your_strong_password"
         }
         ```
     * **Response**: On successful account creation, returns an HTTP status code `201 Created`.
@@ -48,7 +48,7 @@ This section describes how to use the authentication and user-related features o
         * `409 Conflict`: If attempting to create an account with an email that is already in use.
 
 * **Login**: `POST /v1/auth/login`
-    * **Description**: Authenticates a registered user using email and password to obtain an Access Token and Refresh Token.
+    * **Description**: Authenticates a registered user using email and password to obtain an access token and user's information.
     * **Request**: Send a JSON object containing the user's email and password in the request body.
         ```json
         {
@@ -56,11 +56,11 @@ This section describes how to use the authentication and user-related features o
           "password": "your_password"
         }
         ```
-    * **Response**: On successful authentication, returns an HTTP status code `200 OK` along with a JSON object containing the Access Token and user's information.
+    * **Response**: On successful authentication, returns an HTTP status code `200 OK` along with a JSON object containing the access token and user's information.
         ```json
         {
           "name": "leun",
-          "image": "/image.jpg"
+          "image": "/image.jpg",
           "token": "eyJhbGciOiJIUzI1Ni...",
         }
         ```
@@ -97,7 +97,7 @@ This section describes how to use the authentication and user-related features o
         ```json
         {
           "email": "user@example.com",
-          "name": "User Name"
+          "name": "User Name",
           "image": "/image.jpg"
         }
         ```
@@ -127,8 +127,10 @@ Clone this repository:
 ### Backend Configuration
 
 1.  Navigate to the `server` directory.
-2.  Create a `.env` file inside the `src/main/resources` directory.
-3.  Set Up Environment Variables (.env)
+    ```bash
+    cd server
+    ```
+2.  Create a `.env` file in this directory (`src/main/resources/`) and add your environment variables:
     ```
     # JWT Secret Key
     JWT_SECRET=[YOUR_VERY_STRONG_SECRET_KEY]
@@ -155,15 +157,19 @@ Clone this repository:
 ### Frontend Configuration
 
 1.  Navigate to the `client` directory.
-2.  Create a `.env` file inside the `src` directory.
-3.  Set Up Environment Variables (.env)
+    ```bash
+    cd client
     ```
-    # Client ID for OAuth
-    VITE_GOOGLE_CLIENT_ID=[YOUR_FRONTEND_GOOGLE_CLIENT_ID]
-    VITE_NAVER_CLIENT_ID=[YOUR_FRONTEND_NAVER_CLIENT_ID]
+2.  Create a `.env` file in this directory (`client/`) and add your environment variables:
+    ```
+    # Google OAuth Credentials
+    VITE_GOOGLE_CLIENT_ID=[YOUR_GOOGLE_CLIENT_ID]
+    VITE_GOOGLE_REDIRECT_URI=[YOUR_GOOGLE_REDIRECT_URI]
     
-    # Redirect URI for NAVER
-    VITE_NAVER_REDIRECT_URI=[YOUR_FRONTEND_NAVER_CLIENT_URI]
+    # Naver OAuth Credentials
+    VITE_NAVER_CLIENT_ID=[YOUR_NAVER_CLIENT_ID]
+    VITE_NAVER_REDIRECT_URI=[YOUR_NAVER_REDIRECT_URI]
+    
     ```
 
 ### Important
@@ -176,7 +182,6 @@ Clone this repository:
     ```bash
     cd server
     ./gradlew bootRun
-    ```
     ```
 2.  Start the Frontend Development Server:
     ```bash
