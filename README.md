@@ -42,56 +42,58 @@ The following are required to build and run the project:
 
 ### Installation
 
-1.  Clone the repository:
+Clone this repository:
     ```bash
-    git clone [https://github.com/leun2/jwt-auth-template.git](https://github.com/leun2/jwt-auth-template.git)
+    git clone https://github.com/leun2/jwt-auth-template.git
     cd jwt-auth-template
     ```
-2.  Set up the Backend:
-    ```bash
-    cd [FILL_IN_BACKEND_DIRECTORY_NAME] # 예: backend 또는 server
-    # [FILL_IN_BACKEND_INSTALLATION_COMMANDS] # 예: ./mvnw clean install 또는 ./gradlew clean build
-    ```
-3.  Set up the Frontend:
-    ```bash
-    cd [FILL_IN_FRONTEND_DIRECTORY_NAME] # 예: frontend 또는 client
-    npm install # 또는 yarn install
-    ```
 
-### Configuration
+### Backend Configuration
 
-1.  Create a backend environment configuration file. (e.g., `.env` or `application.properties`/`application.yml`)
+1.  Navigate to the `server` directory.
+2.  Create a `.env` file inside the `src/main/resources` directory.
+3.  Set Up Environment Variables (.env)
     ```
-    # Example .env or properties content
-    [FILL_IN_BACKEND_ENV_VARS]
     # JWT Secret Key
     JWT_SECRET=[YOUR_VERY_STRONG_SECRET_KEY]
-    # JWT Expiration Time (in milliseconds or seconds, specify unit)
+    
+    # JWT Expiration Time
     JWT_EXPIRATION=[FILL_IN_EXPIRATION]
+    
     # Google OAuth Credentials
     GOOGLE_CLIENT_ID=[YOUR_GOOGLE_CLIENT_ID]
     GOOGLE_CLIENT_SECRET=[YOUR_GOOGLE_CLIENT_SECRET]
     GOOGLE_REDIRECT_URI=[YOUR_GOOGLE_REDIRECT_URI]
+    
     # Naver OAuth Credentials
     NAVER_CLIENT_ID=[YOUR_NAVER_CLIENT_ID]
     NAVER_CLIENT_SECRET=[YOUR_NAVER_CLIENT_SECRET]
     NAVER_REDIRECT_URI=[YOUR_NAVER_REDIRECT_URI]
-    # Database Configuration (if applicable)
+    
+    # Database Configuration
     DATABASE_URL=[YOUR_DATABASE_URL]
     DATABASE_USERNAME=[YOUR_DATABASE_USERNAME]
     DATABASE_PASSWORD=[YOUR_DATABASE_PASSWORD]
     ```
-2.  Create a frontend environment configuration file. (e.g., `.env` or `.env.local` in React projects)
+**⚠️ Important:** The `.env` file contains sensitive information like credentials and secrets. **Make sure to add `src/main/resources/.env` to your `.gitignore` file** located in the `server` directory to prevent it from being committed to your Git repository.
+
+### Frontend Configuration
+
+1.  Navigate to the `client` directory.
+2.  Create a `.env` file inside the `src` directory.
+3.  Set Up Environment Variables (.env)
     ```
-    # Example .env or .env.local content
-    [FILL_IN_FRONTEND_ENV_VARS]
-    # Backend API Base URL
-    REACT_APP_API_URL=[YOUR_BACKEND_API_URL] # 예: http://localhost:8080/api
-    # Frontend Redirect URIs for OAuth (if needed)
-    REACT_APP_GOOGLE_REDIRECT_URI=[YOUR_FRONTEND_GOOGLE_REDIRECT_URI]
-    REACT_APP_NAVER_REDIRECT_URI=[YOUR_FRONTEND_NAVER_REDIRECT_URI]
+    # Client ID for OAuth
+    VITE_GOOGLE_CLIENT_ID=[YOUR_FRONTEND_GOOGLE_CLIENT_ID]
+    VITE_NAVER_CLIENT_ID=[YOUR_FRONTEND_NAVER_CLIENT_ID]
+    
+    # Redirect URI for NAVER
+    VITE_NAVER_REDIRECT_URI=[YOUR_FRONTEND_NAVER_CLIENT_URI]
     ```
-3.  [FILL_IN_DATABASE_SETUP_STEPS] (예: 데이터베이스 생성, 스키마 적용 등)
+
+### Important
+
+**⚠️  The `.env` file contains sensitive information like credentials and secrets. **Make sure to add `src/main/resources/.env` to your `.gitignore` file** located in the `server` directory to prevent it from being committed to your Git repository. **
 
 ### Running the Application
 
