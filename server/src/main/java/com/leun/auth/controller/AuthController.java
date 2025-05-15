@@ -2,6 +2,7 @@ package com.leun.auth.controller;
 
 import com.leun.auth.dto.AuthDto;
 import com.leun.auth.service.AuthService;
+import jakarta.validation.Valid;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthDto.Request request) throws Exception {
+    public ResponseEntity<?> login(@Valid @RequestBody AuthDto.Request request) throws Exception {
         try {
             authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())

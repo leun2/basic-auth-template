@@ -57,7 +57,7 @@ public class UserController {
     @PatchMapping("/user/profile/name")
     public ResponseEntity<UserProfileDto.Response> updateUserProfileName(
         @AuthenticationPrincipal UserDetails userDetails,
-        @RequestBody UserProfileDto.Request.Name userProfileDto) throws Exception {
+        @Valid @RequestBody UserProfileDto.Request.Name userProfileDto) throws Exception {
 
         UserProfileDto.Response response =
             userService.updateUserProfileName(userDetails.getUsername(), userProfileDto.getName());
@@ -68,7 +68,7 @@ public class UserController {
     @PostMapping("/user/profile/image")
     public ResponseEntity<UserProfileDto.Response> updateUserProfileImage(
         @AuthenticationPrincipal UserDetails userDetails,
-        @ModelAttribute UserProfileDto.Request.Image userProfileDto) throws Exception {
+        @Valid @ModelAttribute UserProfileDto.Request.Image userProfileDto) throws Exception {
 
         // DTO 내부의 MultipartFile 필드를 통해 파일에 접근
         MultipartFile imageFile = userProfileDto.getImage();
