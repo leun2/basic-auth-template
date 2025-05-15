@@ -181,13 +181,10 @@ public class UserControllerTest {
                 .file(mockImageFile) // MockMultipartFile 추가
                 .with(user(AUTHENTICATED_USER_EMAIL)) // 인증된 사용자 상태 시뮬레이션
             )
-            .andExpect(status().isOk()) // HTTP 상태 코드 검증
-            .andExpect(jsonPath("$.name").value("Authenticated User")) // 응답 본문 검증
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("Authenticated User"))
             .andExpect(jsonPath("$.image").value("/uploaded_profile_image.jpg"));
 
-        // userService.updateUserProfileImage 메서드가 올바른 이메일로 정확히 1번 호출되었는지 검증
-        // 컨트롤러는 받은 MultipartFile 객체를 서비스로 전달하는 로직이 현재 없으므로,
-        // 서비스는 이메일만 받아서 처리한다고 가정하고 테스트.
         verify(userService, times(1)).updateUserProfileImage(AUTHENTICATED_USER_EMAIL);
     }
 
@@ -205,9 +202,8 @@ public class UserControllerTest {
         // When & Then
         mockMvc.perform(multipart("/v1/user/profile/image")
                     .file(mockImageFile)
-                // .with(user(...)) 를 사용하지 않음으로써 미인증 상태 시뮬레이션
             )
-            .andExpect(status().isUnauthorized()); // 401 Unauthorized 검증 (SecurityConfig 설정에 따름)
+            .andExpect(status().isUnauthorized());
 
         verify(userService, never()).updateUserProfileImage(anyString());
     }
