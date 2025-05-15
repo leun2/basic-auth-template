@@ -44,8 +44,17 @@ public class SecurityConfiguration {
             )
             .formLogin(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/v1/auth/login", "/health", "/v1/user", "/v1/auth/google/login",
-                    "/v1/auth/naver/login").permitAll()
+                .requestMatchers(
+                    "/v1/auth/login",
+                    "/health",
+                    "/v1/user",
+                    "/v1/auth/google/login",
+                    "/v1/auth/naver/login",
+                    "/swagger-ui.html",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**",
+                    "/v3/api-docs.yaml"
+                ).permitAll()
                 .requestMatchers("/v1/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated())
 
