@@ -4,6 +4,7 @@ package com.leun.auth.config;
 import com.leun.auth.filter.JwtAuthenticationFilter;
 import com.leun.auth.service.CustomUserDetailsService;
 import com.leun.auth.util.JwtUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +16,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
@@ -41,9 +44,15 @@ public class SecurityConfiguration {
             )
             .formLogin(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/v1/auth/login", "/health", "/v1/user", "/v1/auth/google/login", "/v1/auth/naver/login").permitAll()
+                .requestMatchers("/v1/auth/login", "/health", "/v1/user", "/v1/auth/google/login",
+                    "/v1/auth/naver/login").permitAll()
                 .requestMatchers("/v1/admin/**").hasRole("ADMIN")
-                .anyRequest().hasAnyRole("USER", "ADMIN"))
+                .anyRequest().authenticated())
+
+            .exceptionHandling(exceptions -> exceptions
+                .authenticationEntryPoint(unauthenticatedEntryPoint())
+                .accessDeniedHandler(accessDeniedHandler())
+            )
 
             .addFilterBefore(
                 new JwtAuthenticationFilter(jwtUtil, userDetailsService),
@@ -53,10 +62,25 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    public AuthenticationEntryPoint unauthenticatedEntryPoint() {
+        return (request, response, authException) -> {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+        };
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return (request, response, accessDeniedException) -> {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
+        };
+    }
+
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(
-            Arrays.asList("http://localhost:3000", "http://localhost:3001", "http://localhost:3002"));
+            Arrays.asList("http://localhost:3000", "http://localhost:3001",
+                "http://localhost:3002"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
         configuration.setAllowCredentials(true);
@@ -71,7 +95,8 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig)
+        throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
