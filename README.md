@@ -2,8 +2,6 @@
 
 A basic JWT authentication and Google/Naver OAuth integration template built with a Spring (Java) backend and React (TypeScript) frontend. Use this to quickly implement secure and versatile authentication methods.
 
----
-
 ## Features
   
 - [x] **JWT Authentication**: Secure user authentication using JSON Web Tokens.
@@ -12,8 +10,6 @@ A basic JWT authentication and Google/Naver OAuth integration template built wit
 - [X] **Responsive UI**: User interface designed to work well on various devices and screen sizes.
 - [ ] **Refresh Token**: Mechanism for issuing and using refresh tokens to obtain new access tokens without re-authentication. (In progress)
 - [ ] **Redis Setup**: Set up Redis for refresh token management. (TBD)
-
----
 
 ## Tech Stack
 
@@ -31,8 +27,6 @@ This project is built with the following technologies.
 - **Spring Data JPA:** Used to simplify database interactions using JPA.
 - **MySQL:** The relational database management system (RDBMS) used for data storage and management.
 - **JWT (JSON Web Token):** A token-based authentication method used for managing user sessions. (Implemented using Spring Security and JJWT).
-
----
 
 ## Usage
 
@@ -62,7 +56,7 @@ This section describes how to use the authentication and user-related features o
           "password": "your_password"
         }
         ```
-    * **Response**: On successful authentication, returns an HTTP status code `200 OK` along with a JSON object containing the Access Token and Refresh Token. These tokens are used for subsequent API calls that require authentication.
+    * **Response**: On successful authentication, returns an HTTP status code `200 OK` along with a JSON object containing the Access Token and user's information.
         ```json
         {
           "name": "leun",
@@ -73,6 +67,18 @@ This section describes how to use the authentication and user-related features o
     * **Error Responses**:
         * `400 Bad Request`: If the request body is invalid or required fields are missing.
         * `401 Unauthorized`: If the email or password does not match.
+          
+* **OAuth Login Flow**:
+    * **Description**: This section describes the common Server-Side Authorization Code Flow used for both Google and Naver social logins in this application. The process involves the frontend obtaining an authorization code from the OAuth provider and sending it to the backend for final authentication and token issuance.
+    * **Process**:
+        1.  **Initiate Login**: The user clicks the Google or Naver login button on the frontend, initiating the redirect to the respective OAuth provider's (Google or Naver) authentication and consent page.
+        2.  **Authentication & Redirect**: The user authenticates with the OAuth provider and grants the application permission to access their information. The provider then redirects the user's browser back to the configured frontend callback URL, including an authorization `code` (and `state` for Naver) in the URL parameters.
+        3.  **Frontend Sends Code to Backend**: The frontend (running at the callback URL) extracts the `code` (and verifies the `state` for Naver) from the URL parameters. It then sends this `code` via a `POST` request to the backend's specific OAuth login endpoint.
+            * For **Google**: `POST /v1/auth/google/login`
+            * For **Naver**: `POST /v1/auth/naver/login`
+            The `code` (and potentially `state`) are expected in the request body.
+        4.  **Backend Processing**: The backend receives the `code` (and verifies `state` for Naver). It then uses the code to securely interact with the respective OAuth provider's API to exchange the `code` for tokens and fetch user information. Based on this information, it handles user registration (if new) or login (if existing), linking the account to the provider. Finally, it generates your application's own Access Token and Refresh Token (JWTs) for the authenticated user.
+        5.  **Complete Login**: The backend returns the generated application JWTs to the frontend. The frontend receives these tokens, stores them (e.g., in local storage or `AuthContext`), and updates the user's authentication state, completing the login process and typically navigating the user to a logged-in area.
 
 * **Accessing Protected Routes**:
     * **Description**: Explains how to access API endpoints that require authentication using the Access Token obtained from login.
@@ -83,30 +89,6 @@ This section describes how to use the authentication and user-related features o
     * **Error Responses**:
         * `401 Unauthorized`: If the `Authorization` header is missing, or the included token is invalid or expired.
         * `403 Forbidden`: If the user is authenticated but lacks the necessary permissions to access the resource or function.
-
-* **Google OAuth Login Flow**:
-    * **Description**: Log in using a Google account. This process retrieves user information via Google authentication to link or create an account without the standard registration/login steps.
-    * **Process**:
-        1.  **Initiate Google Login from Frontend**: The user clicks the "Login with Google" button. The frontend redirects the user to the configured Google authentication URL. This URL includes `client_id`, `redirect_uri`, `scope`, etc.
-        2.  **Google Authentication and Consent**: The user authenticates with their Google account on the Google login page and consents to the application accessing their information.
-        3.  **Google Redirect**: After authentication and consent, Google redirects the user back to the configured `redirect_uri` (your frontend URL), including an authorization `code` in the URL parameters.
-        4.  **Frontend -> Backend Code Transfer**: The frontend extracts the `code` value from the redirect URL and sends it to the backend's Google OAuth callback endpoint (e.g., `POST /v1/auth/google/callback`).
-        5.  **Backend Processing**: The backend uses the received `code` to request user information (email, profile, etc.) from the Google API.
-        6.  **Backend User Handling & JWT Issuance**: Based on the retrieved Google user information, the backend finds an existing user or creates/links a new one. Upon completion, it generates its own Access Token and Refresh Token for that user.
-        7.  **Backend -> Frontend JWT Return**: The backend responds to the frontend with the generated Access Token and Refresh Token (similar response format to standard login).
-        8.  **Frontend Processing**: The frontend stores the received tokens and handles the logged-in state.
-
-* **Logout**: `POST /v1/auth/logout` (or `DELETE /v1/auth/logout`)
-    * **Description**: Terminates the current user session and invalidates server-side tokens (Access Token, Refresh Token, etc.) associated with the user. Client-side stored tokens should also be removed.
-    * **Request**: Send the request with a valid Access Token included in the `Authorization: Bearer [YOUR_ACCESS_TOKEN]` header.
-    * **Response**: On successful logout, returns an HTTP status code `200 OK` along with a success message or status.
-        ```json
-        // Example Response
-        // Status Code: 200 OK
-        // Empty body or {"message": "Logged out successfully"}
-        ```
-    * **Error Responses**:
-        * `401 Unauthorized`: If the request is made without a valid Access Token.
 
 * **Get Current User Information**: `GET /v1/user/profile`
     * **Description**: Retrieves the basic information of the currently authenticated user.
@@ -121,8 +103,6 @@ This section describes how to use the authentication and user-related features o
         ```
     * **Error Responses**:
         * `401 Unauthorized`: If the request is made without a valid Access Token.
-
----
 
 ## Getting Started
 
