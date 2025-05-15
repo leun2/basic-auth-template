@@ -22,9 +22,10 @@ public class AuthService {
     public AuthDto.Response login(AuthDto.Request request) throws Exception {
         User user = userService.findUserByEmail(request.getEmail());
 
-        String token = jwtUtil.generateToken(user.getEmail());
         UserProfile profile = userProfileRepository.findByUser(user)
             .orElseThrow(() -> new NoSuchElementException("User Does Not Exist"));
+
+        String token = jwtUtil.generateToken(user.getEmail());
 
         return new Response(profile.getName(), profile.getImage(), token);
     }
