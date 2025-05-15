@@ -2,6 +2,8 @@
 
 A basic JWT authentication and Google/Naver OAuth integration template built with a Spring (Java) backend and React (TypeScript) frontend. Use this to quickly implement secure and versatile authentication methods.
 
+---
+
 ## Features
   
 - [x] **JWT Authentication**: Secure user authentication using JSON Web Tokens.
@@ -10,6 +12,8 @@ A basic JWT authentication and Google/Naver OAuth integration template built wit
 - [X] **Responsive UI**: User interface designed to work well on various devices and screen sizes.
 - [ ] **Refresh Token**: Mechanism for issuing and using refresh tokens to obtain new access tokens without re-authentication. (In progress)
 - [ ] **Redis Setup**: Set up Redis for refresh token management. (TBD)
+
+---
 
 ## Tech Stack
 
@@ -28,6 +32,8 @@ This project is built with the following technologies.
 - **MySQL:** The relational database management system (RDBMS) used for data storage and management.
 - **JWT (JSON Web Token):** A token-based authentication method used for managing user sessions. (Implemented using Spring Security and JJWT).
 
+---
+
 ## Usage
 
 This section describes how to use the authentication and user-related features of the application. Please check the detailed explanations and required request/response formats for each endpoint.
@@ -38,23 +44,11 @@ This section describes how to use the authentication and user-related features o
         ```json
         {
           "email": "user@example.com",
-          "password": "your_strong_password"
-          // Include additional information like username if required
+          "password": "your_strong_password"\
         }
         ```
-    * **Response**: On successful account creation, returns an HTTP status code `201 Created` along with the created user information or a success message.
-        ```json
-        // Example Response (returning created user info)
-        // Status Code: 201 Created
-        {
-          "id": 123,
-          "email": "user@example.com"
-          // ...
-        }
-        // Example Response (returning success message)
-        // Status Code: 201 Created
-        // Empty body or {"message": "User registered successfully"}
-        ```
+    * **Response**: On successful account creation, returns an HTTP status code `201 Created`.
+
     * **Error Responses**:
         * `400 Bad Request`: If the request body is invalid or required fields are missing.
         * `409 Conflict`: If attempting to create an account with an email that is already in use.
@@ -71,9 +65,9 @@ This section describes how to use the authentication and user-related features o
     * **Response**: On successful authentication, returns an HTTP status code `200 OK` along with a JSON object containing the Access Token and Refresh Token. These tokens are used for subsequent API calls that require authentication.
         ```json
         {
-          "accessToken": "eyJhbGciOiJIUzI1Ni...",
-          "refreshToken": "eyJhbGciOiJIUzI1Ni..."
-          // Include additional token information like expiration time if needed
+          "name": "leun",
+          "image": "/image.jpg"
+          "token": "eyJhbGciOiJIUzI1Ni...",
         }
         ```
     * **Error Responses**:
@@ -102,37 +96,6 @@ This section describes how to use the authentication and user-related features o
         7.  **Backend -> Frontend JWT Return**: The backend responds to the frontend with the generated Access Token and Refresh Token (similar response format to standard login).
         8.  **Frontend Processing**: The frontend stores the received tokens and handles the logged-in state.
 
-* **Naver OAuth Login Flow**:
-    * **Description**: Log in using a Naver account. The process is similar to the Google OAuth flow.
-    * **Process**:
-        1.  **Initiate Naver Login from Frontend**: The user clicks the "Naver Login" button. The frontend redirects the user to the configured Naver authentication URL (`client_id`, `redirect_uri`, `state`, etc. included).
-        2.  **Naver Authentication and Consent**: The user authenticates with their Naver account and consents to the application accessing information.
-        3.  **Naver Redirect**: After authentication, Naver redirects the user back to the configured `redirect_uri` (your frontend URL), including `code` and `state` values in the URL parameters.
-        4.  **Frontend -> Backend Code Transfer**: The frontend extracts the `code` and `state` values and sends them to the backend's Naver OAuth callback endpoint (e.g., `POST /v1/auth/naver/callback`).
-        5.  **Backend Processing**: The backend uses the received `code` to request user information from the Naver API.
-        6.  **Backend User Handling & JWT Issuance**: Based on the retrieved Naver user information, the backend processes the user and generates Access Token and Refresh Token.
-        7.  **Backend -> Frontend JWT Return**: The backend responds with the generated tokens to the frontend.
-        8.  **Frontend Processing**: The frontend stores the received tokens and handles the logged-in state.
-
-* **Token Refresh**: `POST /v1/auth/refresh`
-    * **Description**: When the Access Token expires, use the Refresh Token to obtain a new pair of Access Token and Refresh Token. This allows maintaining the user's session without requiring re-login.
-    * **Request**: Typically send the Refresh Token in the request body, or potentially in a specific header or cookie. The Access Token header might not be required for this specific request as the Access Token might be expired.
-        ```json
-        // Example Request Body (using Refresh Token)
-        {
-          "refreshToken": "[YOUR_REFRESH_TOKEN]"
-        }
-        ```
-    * **Response**: If the Refresh Token is valid, returns an HTTP status code `200 OK` along with a JSON object containing the new Access Token and Refresh Token.
-        ```json
-        {
-          "accessToken": "eyJhbGciOiJIUzI1Ni_new_access...",
-          "refreshToken": "eyJhbGciOiJIUzI1Ni_new_refresh..."
-        }
-        ```
-    * **Error Responses**:
-        * `401 Unauthorized`: If the Refresh Token is invalid or expired.
-
 * **Logout**: `POST /v1/auth/logout` (or `DELETE /v1/auth/logout`)
     * **Description**: Terminates the current user session and invalidates server-side tokens (Access Token, Refresh Token, etc.) associated with the user. Client-side stored tokens should also be removed.
     * **Request**: Send the request with a valid Access Token included in the `Authorization: Bearer [YOUR_ACCESS_TOKEN]` header.
@@ -145,24 +108,21 @@ This section describes how to use the authentication and user-related features o
     * **Error Responses**:
         * `401 Unauthorized`: If the request is made without a valid Access Token.
 
-* **Get Current User Information**: `GET /v1/user/me`
+* **Get Current User Information**: `GET /v1/user/profile`
     * **Description**: Retrieves the basic information of the currently authenticated user.
     * **Request**: Send the request with a valid Access Token included in the `Authorization: Bearer [YOUR_ACCESS_TOKEN]` header. The request body is typically empty.
     * **Response**: If the Access Token is valid, returns an HTTP status code `200 OK` along with a JSON object containing the current authenticated user's information.
         ```json
         {
-          "id": 123,
           "email": "user@example.com",
-          "name": "User Name" // May include linked social account info etc.
-          // ...
+          "name": "User Name"
+          "image": "/image.jpg"
         }
         ```
     * **Error Responses**:
         * `401 Unauthorized`: If the request is made without a valid Access Token.
 
 ---
-
-**Note**: The descriptions above are based on common JWT and OAuth implementation patterns. The exact endpoint URLs, specific field names and formats in request/response bodies, and token management methods (e.g., whether Refresh Tokens are used, where they are stored, etc.) may vary depending on the actual backend code of your application. Please refer to the code for precise details.
 
 ## Getting Started
 
