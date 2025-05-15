@@ -1,47 +1,44 @@
 # JWT Auth Template
 
-![GitHub repo size](https://img.shields.io/github/repo-size/leun2/jwt-auth-template)
-![GitHub last commit](https://img.shields.io/github/last-commit/leun2/jwt-auth-template)
-## About
-
 A basic JWT authentication and Google/Naver OAuth integration template built with a Spring (Java) backend and React (TypeScript) frontend. Use this to quickly implement secure and versatile authentication methods.
 
-Spring (Java) 백엔드와 React (TypeScript) 프론트엔드로 구축된 JWT 기본 인증 및 Google/Naver OAuth 연동 템플릿입니다. 안전하고 다양한 인증 방식을 빠르게 적용하는 데 활용하세요.
-
 ## Features
+  
+- [x] **JWT Authentication**: Secure user authentication using JSON Web Tokens.
+- [x] **Google OAuth Integration**: Seamless login via Google accounts.
+- [x] **Naver OAuth Integration**: Seamless login via Naver accounts.
+- [X] **Responsive UI**: User interface designed to work well on various devices and screen sizes.
+- [ ] **Refresh Token**: Mechanism for issuing and using refresh tokens to obtain new access tokens without re-authentication. (In progress)
+- [ ] **Redis Setup**: Set up Redis for refresh token management. (TBD)
 
-* **JWT Authentication**: Secure user authentication using JSON Web Tokens.
-* **Token Management**: Generation, verification, and (potentially) refresh of JWTs.
-* **Google OAuth Integration**: Seamless login via Google accounts.
-* **Naver OAuth Integration**: Seamless login via Naver accounts.
-* **Spring Backend**: Robust backend built with the Spring framework (Java).
-* **React Frontend**: Dynamic and responsive frontend built with React (TypeScript).
-* **[FILL_IN_OTHER_FEATURES]**: 프로젝트의 다른 주요 기능을 여기에 나열하세요. (예: 사용자 등록, 비밀번호 재설정, 역할 기반 접근 제어 등)
+## Tech Stack
 
-## Technologies Used
+This project is built with the following technologies.
 
-* **Backend**:
-    * Java ([FILL_IN_JAVA_VERSION])
-    * Spring Boot ([FILL_IN_SPRING_BOOT_VERSION])
-    * [FILL_IN_OTHER_BACKEND_LIBS] (예: Spring Security, JJWT, Database Driver 등)
-* **Frontend**:
-    * TypeScript ([FILL_IN_TYPESCRIPT_VERSION])
-    * React ([FILL_IN_REACT_VERSION])
-    * [FILL_IN_OTHER_FRONTEND_LIBS] (예: React Router, Axios, UI Library 등)
-* **Database** (Optional):
-    * [FILL_IN_DATABASE_TYPE_AND_VERSION] (예: PostgreSQL 14, MySQL 8 등)
+### Frontend
+- **React:** A core JavaScript library for building user interfaces.
+- **TypeScript:** Used for enhanced code stability and developer productivity by adding static typing.
+- **Vite:** A fast and modern frontend build tool and development server.
+- **Material UI (MUI):** A component library based on Google Material Design for building consistent and stylish UIs.
+
+### Backend
+- **Spring Boot (Java):** The primary framework for Java-based backend application development.
+- **Spring Security:** The core security framework handling user authentication and authorization.
+- **Spring Data JPA:** Used to simplify database interactions using JPA.
+- **MySQL:** The relational database management system (RDBMS) used for data storage and management.
+- **JWT (JSON Web Token):** A token-based authentication method used for managing user sessions. (Implemented using Spring Security and JJWT).
 
 ## Getting Started
 
-To get a local copy up and running, follow these simple steps.
+A guide for setting up and running the project in your local environment.
 
 ### Prerequisites
 
-Make sure you have the following installed:
+The following are required to build and run the project:
 
-* Java Development Kit (JDK) ([FILL_IN_MINIMUM_JDK_VERSION])
-* Node.js ([FILL_IN_MINIMUM_NODEJS_VERSION]) and npm or yarn
-* [FILL_IN_OTHER_PREREQUISITES] (예: Docker, Database Client 등)
+- Node.js (LTS version recommended)
+- Java 17+
+- Gradle
 
 ### Installation
 
