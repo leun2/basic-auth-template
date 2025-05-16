@@ -9,7 +9,7 @@ A basic JWT authentication and Google/Naver OAuth integration template built wit
 - [x] **Naver OAuth Integration**: Seamless login via Naver accounts.
 - [x] **Responsive UI**: User interface designed to work well on various devices and screen sizes.
 - [ ] **Refresh Token Support**: Enables silent token renewal without re-login. *(In development; currently only Access Token is issued.)*
-- [ ] **Redis integration**: Manage refresh tokens using Redis. *(Planned)*
+- [ ] **Redis Integration**: Manage refresh tokens using Redis. *(Planned)*
 
 ## Tech Stack
 
