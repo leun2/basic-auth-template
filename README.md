@@ -3,13 +3,24 @@
 A basic JWT authentication and Google/Naver OAuth integration template built with a Spring (Java) backend and React (TypeScript) frontend. Use this to quickly implement secure and versatile authentication methods.
 
 ## Features
+
+A list of key functionalities and technical implementations supported by the project.
+
+- User Authentication & Management:
+
+  - JWT Authentication: Implemented secure user authentication using JSON Web Tokens for robust session management.
+  - Google OAuth Integration: Enables seamless and secure user login through Google accounts, leveraging OAuth2 for authentication.
+  - Naver OAuth Integration: Provides convenient login functionality via Naver accounts, integrating OAuth2 for secure access.
+  - User Management RESTful API: Developed a comprehensive set of CRUD RESTful APIs for managing user accounts, covering functionalities such as user registration, profile updates, and account retrieval.
+
+- User Interface (UI):
+
+  - Responsive UI: User interface designed to work well across various devices and screen sizes, providing an optimized viewing experience.
+
+- Planned / Future Features:
   
-- [x] **JWT Authentication**: Secure user authentication using JSON Web Tokens.
-- [x] **Google OAuth Integration**: Seamless login via Google accounts.
-- [x] **Naver OAuth Integration**: Seamless login via Naver accounts.
-- [x] **Responsive UI**: User interface designed to work well on various devices and screen sizes.
-- [ ] **Refresh Token Support**: Enables silent token renewal without re-login. *(In development; currently only Access Token is issued.)*
-- [ ] **Redis Integration**: Manage refresh tokens using Redis. *(Planned)*
+  - Refresh Token Support (In Development): Working on enabling silent token renewal without requiring users to re-login. (Currently, only Access Tokens are issued.)
+  - Redis Integration (Planned): Planning to integrate Redis for efficient management and storage of refresh tokens, enhancing security and performance.
 
 ## Tech Stack
 
