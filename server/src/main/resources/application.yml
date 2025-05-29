@@ -11,9 +11,9 @@ spring:
         cache: false
 
     datasource:
-        url: jdbc:mysql://localhost:3306/${DB_NAME}
-        username: ${DB_USERNAME}
-        password: ${DB_PASSWORD}
+        url: ${DATABASE_URL}
+        username: ${DATABASE_USERNAME}
+        password: ${DATABASE_PASSWORD}
         driver-class-name: com.mysql.cj.jdbc.Driver
 
     sql:
@@ -22,8 +22,8 @@ spring:
 
     jpa:
         hibernate:
-            ddl-auto: validate
-        show-sql: true
+            ddl-auto: create
+        show-sql: false
         properties:
             hibernate:
                 format_sql: true
@@ -51,10 +51,11 @@ spring:
 logging:
     level:
         root: info
-        org.springframework: info
-        org.hibernate.SQL: debug
-        org.hibernate.orm.jdbc.bind: trace
-        org.hibernate.type.descriptor.sql.BasicBinder: trace
+        org.springframework: warn
+        org.hibernate: warn
+        org.hibernate.SQL: warn
+        org.hibernate.orm.jdbc.bind: warn
+        org.hibernate.type.descriptor.sql.BasicBinder: warn
 
 springdoc:
     api-docs:
@@ -68,4 +69,6 @@ springdoc:
         display-request-duration: true
 
 jwt:
-    secret: ${JWT_SECRET_KEY}
+    secret: ${JWT_SECRET}
+    access-token-expiration: ${ACCESS_TOKEN_EXPIRATION}
+    refresh-token-expiration: ${REFRESH_TOKEN_EXPIRATION}
