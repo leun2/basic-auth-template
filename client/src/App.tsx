@@ -5,16 +5,12 @@ import CssBaseline from '@mui/material/CssBaseline';
 import SignIn from "pages/SignIn";
 import SignUp from "pages/SignUp";
 import { AuthProvider } from "components/auth/AuthContext";
-import { setupInterceptors } from "apis/setupInterceptors";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import AuthenticatedRoute from "components/auth/AuthenticatedRoute";
 import Settings from "pages/Settings";
 import Home from "pages/Home";
 import Profile from "pages/Profile";
 import NaverCallback from "pages/NaverCallback"; 
-
-
-setupInterceptors();
 
 function App() {
     return (
