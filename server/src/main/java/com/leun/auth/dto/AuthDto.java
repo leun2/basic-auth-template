@@ -32,7 +32,7 @@ public class AuthDto {
     public static class Response {
         private String name;
         private String image;
-        private String token;
-
+        private String accessToken;
+        private String refreshToken;
     }
 }
