@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from 'components/auth/AuthContext';
-import { Box, Typography, CircularProgress, Container } from '@mui/material';
+import LoadingSpinner from 'components/common/LoadingSpinner';
 
 function NaverCallback() {
     const location = useLocation();
@@ -61,17 +61,9 @@ function NaverCallback() {
     }, [location, navigate, loginWithNaver]);
 
     return (
-        <Container component="main" maxWidth="xs" sx={{ textAlign: 'center', mt: 8 }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <CircularProgress sx={{ mb: 2 }} />
-                <Typography variant="h6">
-                    Naver 로그인 처리 중...
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    잠시만 기다려 주세요.
-                </Typography>
-            </Box>
-        </Container>
+        <div>
+            <LoadingSpinner />
+        </div>
     );
 }
 
