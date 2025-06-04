@@ -8,6 +8,8 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.leun.auth.config.OAuthConfig;
 import com.leun.auth.dto.AuthDto;
+import com.leun.auth.entity.RefreshToken;
+import com.leun.auth.repository.RefreshTokenRepository;
 import com.leun.auth.util.JwtUtil;
 import com.leun.user.entity.User;
 import com.leun.user.entity.User.ProviderType;
@@ -42,6 +44,7 @@ public class OAuthService {
     private final UserRepository userRepository;
     private final UserProfileRepository userProfileRepository;
     private final UserSettingRepository userSettingRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final RestTemplate restTemplate;
@@ -112,9 +115,17 @@ public class OAuthService {
             throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
 
-        String token = jwtUtil.generateToken(email);
+        String accessToken = jwtUtil.generateAccessToken(email);
+        String refreshToken = jwtUtil.generateRefreshToken(email);
 
-        return new AuthDto.Response(name, imageUrl, token);
+        User finalUser = user;
+        refreshTokenRepository.findByUser(finalUser)
+            .ifPresentOrElse(
+                rt -> rt.updateToken(refreshToken),
+                () -> refreshTokenRepository.save(new RefreshToken(finalUser, refreshToken))
+            );
+
+        return new AuthDto.Response(name, imageUrl, accessToken, refreshToken);
     }
 
     @Transactional
@@ -151,10 +162,10 @@ public class OAuthService {
         if (tokenResponseBody == null || tokenResponseBody.get("access_token") == null) {
             throw new Exception("Failed to get access token from Naver token endpoint.");
         }
-        String accessToken = (String) tokenResponseBody.get("access_token");
+        String naverAccessToken = (String) tokenResponseBody.get("access_token");
 
         HttpHeaders userInfoHeaders = new HttpHeaders();
-        userInfoHeaders.set("Authorization", "Bearer " + accessToken);
+        userInfoHeaders.set("Authorization", "Bearer " + naverAccessToken);
 
         HttpEntity<Void> userInfoRequestEntity = new HttpEntity<>(userInfoHeaders);
 
@@ -209,8 +220,17 @@ public class OAuthService {
             throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
 
-        String token = jwtUtil.generateToken(email);
+        String accessToken = jwtUtil.generateAccessToken(email);
+        String refreshToken = jwtUtil.generateRefreshToken(email);
 
-        return new AuthDto.Response(name, imageUrl, token);
+        User finalUser = user;
+        // Refresh Token 저장 (기존 토큰 업데이트 또는 신규 저장)
+        refreshTokenRepository.findByUser(finalUser)
+            .ifPresentOrElse(
+                rt -> rt.updateToken(refreshToken),
+                () -> refreshTokenRepository.save(new RefreshToken(finalUser, refreshToken))
+            );
+
+        return new AuthDto.Response(name, imageUrl, accessToken, refreshToken);
     }
 }
