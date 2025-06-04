@@ -1,10 +1,11 @@
 import { apiClient } from "apis/apiClient";
 
 interface SignInResponseData {
-    token: string;
+    accessToken: string;
+    refreshToken: string;
     name: string;
-    image?: string | null; // 프로필 이미지 URL 필드 추가 (서버 응답에 따라 조정)
-    settings?: { // 서버 응답에 settings가 포함된다면 추가
+    image?: string | null;
+    settings?: {
         language: string | null;
         country: string | null;
         timezone: string | null;
@@ -16,7 +17,6 @@ interface SignInResponse {
     data: SignInResponseData;
     message?: string; // 서버 에러 메시지를 위한 필드 추가
 }
-
 
 export const signUp = (email: string, password: string, name: String) =>
     apiClient.post('/v1/user', {
@@ -49,5 +49,17 @@ export const signInWithNaver = async (authCode: string): Promise<SignInResponse 
         }
         throw error; // 네트워크 오류 등 다른 에러는 다시 throw
     }
+};
+
+// Refresh Token을 사용하여 Access Token을 재발급 받는 API
+export const refreshAccessToken = async (refreshToken: string): Promise<{ accessToken: string, refreshToken: string }> => {
+    const response = await apiClient.post<{ accessToken: string, refreshToken: string }>('/v1/auth/refresh-token', { refreshToken });
+    return response.data;
+};
+
+// 로그아웃 시 Refresh Token을 서버에서 삭제 요청하는 API
+export const signOut = async (refreshToken: string): Promise<any> => {
+    const response = await apiClient.post('/v1/auth/logout', { refreshToken });
+    return response.data;
 };
 
