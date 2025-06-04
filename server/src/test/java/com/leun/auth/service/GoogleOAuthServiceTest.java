@@ -137,7 +137,7 @@ class GoogleOAuthServiceTest {
                 invocation -> invocation.getArgument(0));
             when(userSettingRepository.save(any())).thenAnswer(
                 invocation -> invocation.getArgument(0));
-            when(jwtUtil.generateToken(anyString())).thenReturn("testJwtToken");
+            when(jwtUtil.generateAccessToken(anyString())).thenReturn("testJwtToken");
 
             // Call the method under test
             AuthDto.Response response = oAuthService.googleLoginWithAuthCode(authCode);
@@ -146,7 +146,7 @@ class GoogleOAuthServiceTest {
             assertNotNull(response);
             assertEquals(testName, response.getName());
             assertEquals(testImageUrl, response.getImage());
-            assertEquals("testJwtToken", response.getToken());
+            assertEquals("testJwtToken", response.getAccessToken());
 
             // Verify interactions
             verify(userRepository, times(1)).findByEmail(testEmail);
@@ -175,7 +175,7 @@ class GoogleOAuthServiceTest {
             assertEquals(savedUser, savedSetting.getUser());
 
             verify(passwordEncoder, times(1)).encode(anyString()); // Check if encoding was called
-            verify(jwtUtil, times(1)).generateToken(testEmail);
+            verify(jwtUtil, times(1)).generateAccessToken(testEmail);
         }
     }
 
@@ -229,7 +229,7 @@ class GoogleOAuthServiceTest {
 
             // Mock UserRepository to simulate an existing Google user
             when(userRepository.findByEmail(testEmail)).thenReturn(Optional.of(existingUser));
-            when(jwtUtil.generateToken(anyString())).thenReturn("testJwtToken");
+            when(jwtUtil.generateAccessToken(anyString())).thenReturn("testJwtToken");
 
             // Call the method under test
             AuthDto.Response response = oAuthService.googleLoginWithAuthCode(authCode);
@@ -239,7 +239,7 @@ class GoogleOAuthServiceTest {
 
             assertEquals(testName, response.getName());
             assertEquals(testImageUrl, response.getImage());
-            assertEquals("testJwtToken", response.getToken());
+            assertEquals("testJwtToken", response.getAccessToken());
 
             // Verify interactions
             verify(userRepository, times(1)).findByEmail(testEmail);
@@ -250,7 +250,7 @@ class GoogleOAuthServiceTest {
                 any(UserSetting.class)); // Should not save settings
             verify(passwordEncoder, never()).encode(
                 anyString()); // Should not encode password for existing user
-            verify(jwtUtil, times(1)).generateToken(testEmail);
+            verify(jwtUtil, times(1)).generateAccessToken(testEmail);
         }
     }
 
@@ -312,7 +312,7 @@ class GoogleOAuthServiceTest {
             // Verify interactions
             verify(userRepository, times(1)).findByEmail(testEmail);
             verify(userRepository, never()).save(any(User.class)); // Should not save
-            verify(jwtUtil, never()).generateToken(anyString()); // Should not generate token
+            verify(jwtUtil, never()).generateAccessToken(anyString()); // Should not generate token
         }
     }
 

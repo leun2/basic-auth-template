@@ -128,7 +128,7 @@ public class ApplicationIntegrationTest {
         OAuthDto.GoogleRequest googleRequest = new GoogleRequest("some_valid_google_auth_code");
 
         AuthDto.Response mockAuthResponse = new AuthDto.Response(
-            "Google User", "/google-image.jpg", "mock_google_jwt_token");
+            "Google User", "/google-image.jpg", "mock_google_access_token", "mock_google_refresh_token");
 
         // given(oAuthService.googleLoginWithAuthCode(anyString())).willReturn(mockAuthResponse);
 
@@ -144,7 +144,8 @@ public class ApplicationIntegrationTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value(mockAuthResponse.getName()))
             .andExpect(jsonPath("$.image").value(mockAuthResponse.getImage()))
-            .andExpect(jsonPath("$.token").value(mockAuthResponse.getToken()));
+            .andExpect(jsonPath("$.accessToken").value(mockAuthResponse.getAccessToken()))
+            .andExpect(jsonPath("$.refreshToken").value(mockAuthResponse.getRefreshToken()));
 
         verify(oAuthService, times(1)).googleLoginWithAuthCode(anyString());
     }
@@ -171,7 +172,7 @@ public class ApplicationIntegrationTest {
         OAuthDto.NaverRequest naverRequest = new NaverRequest("some_valid_naver_auth_code");
 
         AuthDto.Response mockAuthResponse = new AuthDto.Response(
-            "Naver User", "/naver-image.png", "mock_naver_jwt_token");
+            "Naver User", "/naver-image.png", "mock_naver_access_token", "mock_google_refresh_token");
 
         doReturn(mockAuthResponse)
             .when(oAuthService)
@@ -184,7 +185,8 @@ public class ApplicationIntegrationTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value(mockAuthResponse.getName()))
             .andExpect(jsonPath("$.image").value(mockAuthResponse.getImage()))
-            .andExpect(jsonPath("$.token").value(mockAuthResponse.getToken()));
+            .andExpect(jsonPath("$.accessToken").value(mockAuthResponse.getAccessToken()))
+            .andExpect(jsonPath("$.refreshToken").value(mockAuthResponse.getRefreshToken()));
 
         verify(oAuthService, times(1)).naverLoginWithAuthCode(anyString());
     }

@@ -59,7 +59,7 @@ public class AuthServiceTest {
         mockProfile.setUser(mockUser);
 
         given(userService.findUserByEmail(email)).willReturn(mockUser);
-        given(jwtUtil.generateToken(email)).willReturn(jwtToken);
+        given(jwtUtil.generateAccessToken(email)).willReturn(jwtToken);
         given(userProfileRepository.findByUser(mockUser)).willReturn(Optional.of(mockProfile));
 
         // When
@@ -69,11 +69,11 @@ public class AuthServiceTest {
         assertNotNull(loginResponse);
         assertEquals(userName, loginResponse.getName());
         assertEquals(userImage, loginResponse.getImage());
-        assertEquals(jwtToken, loginResponse.getToken());
+        assertEquals(jwtToken, loginResponse.getAccessToken());
 
         verify(userService, times(1)).findUserByEmail(email);
         verify(userProfileRepository, times(1)).findByUser(mockUser);
-        verify(jwtUtil, times(1)).generateToken(email);
+        verify(jwtUtil, times(1)).generateAccessToken(email);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class AuthServiceTest {
 
         verify(userService, times(1)).findUserByEmail(email);
         verify(userProfileRepository, times(1)).findByUser(mockUser);
-        verify(jwtUtil, times(0)).generateToken(email);
+        verify(jwtUtil, times(0)).generateAccessToken(email);
     }
 
     @Test
@@ -121,6 +121,6 @@ public class AuthServiceTest {
 
         verify(userService, times(1)).findUserByEmail(email);
         verify(userProfileRepository, times(0)).findByUser(any(User.class));
-        verify(jwtUtil, times(0)).generateToken(anyString());
+        verify(jwtUtil, times(0)).generateAccessToken(anyString());
     }
 }

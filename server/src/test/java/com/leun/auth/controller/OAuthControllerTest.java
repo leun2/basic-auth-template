@@ -50,7 +50,7 @@ public class OAuthControllerTest {
     void googleLogin_Success_WithValidCode() throws Exception {
         // Given
         OAuthDto.GoogleRequest request = new OAuthDto.GoogleRequest("valid_google_auth_code");
-        AuthDto.Response mockResponse = new AuthDto.Response("google user", "/google-image.jpg", "mock_google_jwt_token");
+        AuthDto.Response mockResponse = new AuthDto.Response("google user", "/google-image.jpg", "mock_google_access_token", "mock_google_refresh_token");
 
         given(oAuthService.googleLoginWithAuthCode(anyString())).willReturn(mockResponse);
 
@@ -61,7 +61,8 @@ public class OAuthControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value("google user"))
             .andExpect(jsonPath("$.image").value("/google-image.jpg"))
-            .andExpect(jsonPath("$.token").value("mock_google_jwt_token"));
+            .andExpect(jsonPath("$.accessToken").value("mock_google_access_token"))
+            .andExpect(jsonPath("$.refreshToken").value("mock_google_refresh_token"));
 
         verify(oAuthService, times(1)).googleLoginWithAuthCode("valid_google_auth_code");
     }
@@ -71,7 +72,7 @@ public class OAuthControllerTest {
     void naverLogin_Success_WithValidCode() throws Exception {
         // Given
         OAuthDto.NaverRequest request = new OAuthDto.NaverRequest("valid_naver_auth_code");
-        AuthDto.Response mockResponse = new AuthDto.Response("naver user", "/naver-image.jpg", "mock_naver_jwt_token");
+        AuthDto.Response mockResponse = new AuthDto.Response("naver user", "/naver-image.jpg", "mock_naver_access_token", "mock_naver_refresh_token");
 
         given(oAuthService.naverLoginWithAuthCode(anyString())).willReturn(mockResponse);
 
@@ -82,7 +83,8 @@ public class OAuthControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value("naver user"))
             .andExpect(jsonPath("$.image").value("/naver-image.jpg"))
-            .andExpect(jsonPath("$.token").value("mock_naver_jwt_token"));
+            .andExpect(jsonPath("$.accessToken").value("mock_naver_access_token"))
+            .andExpect(jsonPath("$.refreshToken").value("mock_naver_refresh_token"));
 
         verify(oAuthService, times(1)).naverLoginWithAuthCode("valid_naver_auth_code");
     }

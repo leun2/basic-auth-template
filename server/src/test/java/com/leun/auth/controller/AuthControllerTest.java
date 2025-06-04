@@ -52,7 +52,7 @@ class AuthControllerTest {
     void login_Success() throws Exception {
         // Given
         AuthDto.Request loginRequest = new AuthDto.Request("test@example.com", "password123");
-        AuthDto.Response loginResponse = new AuthDto.Response("test", "/example", "mock_jwt_token_123");
+        AuthDto.Response loginResponse = new AuthDto.Response("test", "/example", "mock_access_token", "mock_refresh_token");
 
         given(authService.login(any(AuthDto.Request.class))).willReturn(loginResponse);
 
@@ -63,7 +63,9 @@ class AuthControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value("test"))
             .andExpect(jsonPath("$.image").value("/example"))
-            .andExpect(jsonPath("$.token").value("mock_jwt_token_123"));
+            .andExpect(jsonPath("$.accessToken").value("mock_access_token"))
+            .andExpect(jsonPath("$.refreshToken").value("mock_refresh_token"));
+
     }
 
     @Test
