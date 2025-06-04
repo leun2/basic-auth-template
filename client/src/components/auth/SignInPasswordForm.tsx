@@ -133,7 +133,7 @@ function SignInPasswordForm({ email, onPrev }: SignInPasswordFormProps) {
 
                     {/* Login link */}
                     <Typography fontSize={14}>
-                        calendar를 처음 사용하시나요? {' '}
+                        profile을 처음 사용하시나요? {' '}
                         <Typography
                             fontSize={14}
                             component="span" 
