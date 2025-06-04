@@ -12,18 +12,34 @@ import org.springframework.stereotype.Component;
 public class JwtUtil {
 
     private final Key key;
-    private static final long EXPIRATION_TIME = 1000 * 60 * 20;
 
-    public JwtUtil(@Value("${jwt.secret}") String secretKey) {
+    private final long accessTokenExpirationTime;
+    private final long refreshTokenExpirationTime;
+
+    public JwtUtil(
+        @Value("${jwt.secret}") String secretKey,
+        @Value("${jwt.access-token-expiration}") long accessTokenExpirationTime,
+        @Value("${jwt.refresh-token-expiration}") long refreshTokenExpirationTime) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
+        this.accessTokenExpirationTime = accessTokenExpirationTime;
+        this.refreshTokenExpirationTime = refreshTokenExpirationTime;
     }
 
-    public String generateToken(String email) {
+    public String generateAccessToken(String email) {
 
         return Jwts.builder()
             .setSubject(email)
             .setIssuedAt(new Date())
-            .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+            .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpirationTime))
+            .signWith(key, SignatureAlgorithm.HS256)
+            .compact();
+    }
+
+    public String generateRefreshToken(String email) {
+        return Jwts.builder()
+            .setSubject(email)
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpirationTime)) // Refresh Token 만료 시간 사용
             .signWith(key, SignatureAlgorithm.HS256)
             .compact();
     }
@@ -51,3 +67,4 @@ public class JwtUtil {
         }
     }
 }
+
