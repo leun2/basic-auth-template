@@ -61,7 +61,7 @@ function EmailForm({ mode, onNext }: EmailFormProps) {
                                 </Typography>
 
                                 <Typography sx={{color:'#666666', fontSize:'16px'}}>
-                                    calendar로 계속
+                                    profile로 계속
                                 </Typography>
                             </Stack>
                         ) : (
@@ -118,7 +118,7 @@ function EmailForm({ mode, onNext }: EmailFormProps) {
                             mode === "signin" ? 
                                 (
                                     <Typography fontSize={14}>
-                                        calendar를 처음 사용하시나요? {' '}
+                                        profile를 처음 사용하시나요? {' '}
                                         <Typography
                                             fontSize={14}
                                             component="span" 
