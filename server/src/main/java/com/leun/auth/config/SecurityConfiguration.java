@@ -50,6 +50,8 @@ public class SecurityConfiguration {
                     "/v1/user",
                     "/v1/auth/google/login",
                     "/v1/auth/naver/login",
+                    "/v1/auth/refresh-token",
+                    "/v1/auth/logout",
                     "/swagger-ui.html",
                     "/swagger-ui/**",
                     "/v3/api-docs/**",
